@@ -5,6 +5,12 @@ import ClimateMachine.Mesh.Elements: baryweights
 using GaussQuadrature
 using Base.Threads
 
+# Depending on CliMa version 
+# old
+# polynomialorders(::DiscontinuousSpectralElementGrid{T, dim, N}) where {T, dim, N} = Tuple([N for i in 1:dim])
+# new 
+polynomialorders(::DiscontinuousSpectralElementGrid{T, dim, N}) where {T, dim, N} = N
+
 # utils.jl
 """
 function cellaverage(Q; M = nothing)
