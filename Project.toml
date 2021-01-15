@@ -1,0 +1,10 @@
+name = "QuickVizExample"
+uuid = "8cf21e28-fba0-46cf-863d-203fb098e958"
+authors = ["sandreza <andrenogueirasouza@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+ClimateMachine = "777c4786-024f-11e9-21a3-85d5d4106250"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+GaussQuadrature = "d54b0c1a-921d-58e0-8e36-89d8069c0969"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
