@@ -1,4 +1,4 @@
-using GLMakie, Statistics
+using GLMakie, Statistics, Printf
 
 """
 visualize(states::AbstractArray; statenames = string.(1:length(states)), quantiles = (0.1, 0.99), aspect = (1,1,1), resolution = (1920, 1080), statistics = false, title = "Field = ")

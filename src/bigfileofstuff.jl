@@ -6,9 +6,9 @@ using GaussQuadrature
 using Base.Threads
 
 # Depending on CliMa version 
-# old
+# old, should return a tuple of polynomial orders
 # polynomialorders(::DiscontinuousSpectralElementGrid{T, dim, N}) where {T, dim, N} = Tuple([N for i in 1:dim])
-# new 
+# new, should return a tuple of polynomial orders
 polynomialorders(::DiscontinuousSpectralElementGrid{T, dim, N}) where {T, dim, N} = N
 
 # utils.jl
@@ -181,10 +181,11 @@ function InterpolationHelper(g::DiscontinuousSpectralElementGrid)
     return nothing
 end
 
-struct ElementHelper{S, T, U, V, W}
+struct ElementHelper{S, T, U, Q, V, W}
     cellcenters::S
     coordinates::T
     cartesiansizes::U
+    polynomialorders::Q
     permutation::V
     cartesianindex::W
 end
@@ -203,17 +204,17 @@ function ElementHelper(g::DiscontinuousSpectralElementGrid)
     check = ne == ex * ey * ez
     check ? true : error("improper counting")
     p = getperm(xC, yC, zC, ex, ey, ez)
-
+    # should use dispatch ...
     if length(porders) == 3
         npx, npy, npz = porders
         lin = reshape(collect(1:length(xC)), (ex, ey, ez))
-        return ElementHelper((xC, yC, zC), (x, y, z), (ex, ey, ez), p, lin)
+        return ElementHelper((xC, yC, zC), (x, y, z), (ex, ey, ez), porders, p, lin)
     elseif length(porders) == 2
         npx, npy = porders
         lin = reshape(collect(1:length(xC)), (ex, ey))
         check = ne == ex * ey 
         check ? true : error("improper counting")
-        return ElementHelper((xC, yC), (x, y), (ex, ey), p, lin)
+        return ElementHelper((xC, yC), (x, y), (ex, ey), porders, p, lin)
     else
         println("no constructor for polynomial order = ", porders)
         return nothing
@@ -234,16 +235,16 @@ end
 function getvalue(f, location, gridhelper::GridHelper)
     ih = gridhelper.interpolation
     eh = gridhelper.element
-    porders = polynomialorders(gridhelper.grid)
+    porders = gridhelper.element.polynomialorders
     if length(porders) == 3
-        npx, npy, npz = polynomialorders(gridhelper.grid)
+        npx, npy, npz = gridhelper.element.polynomialorders
         fl = reshape(f, (npx+1, npy+1, npz+1, prod(eh.cartesiansizes)))
         ip = getvalue(fl, eh.cellcenters..., location, 
                 eh.permutation, eh.cartesianindex, ih.cartesianindex, 
                 eh.coordinates..., ih.points..., ih.interpolation...)
         return ip
     elseif length(porders) == 2
-        npx, npy = polynomialorders(gridhelper.grid)
+        npx, npy = gridhelper.element.polynomialorders
         fl = reshape(f, (npx+1, npy+1, prod(eh.cartesiansizes)))
         ip = getvalue(fl, eh.cellcenters..., location, 
                 eh.permutation, eh.cartesianindex, ih.cartesianindex, 
