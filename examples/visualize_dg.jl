@@ -48,7 +48,7 @@ for i in 1:nt
 end
 toc = time()
 println("interpolation time is $(toc - tic) seconds")
-# visualize
+# visualize (z-axis is time here)
 states = [ut, vt, ηt, ct]
 statenames = ["u", "v", "η", "c"]
 volumeslice(states, statenames = statenames)
