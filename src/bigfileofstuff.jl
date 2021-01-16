@@ -192,6 +192,7 @@ end
 
 addup(xC, tol) = sum(abs.(xC[1] .- xC) .≤ tol)
 
+# only valid for cartesian domains
 function ElementHelper(g::DiscontinuousSpectralElementGrid)
     porders = polynomialorders(g)
     x, y, z = coordinates(g)
@@ -255,7 +256,6 @@ function getvalue(f, location, gridhelper::GridHelper)
 end
 
 # lagrange_interpolation.jl
-
 function checkgl(x, rx)
     for i in eachindex(rx)
         if abs(x - rx[i]) ≤ eps(rx[i])  return i end
@@ -312,7 +312,6 @@ function lagrange_eval(f, newx, newy, rx, ry, ωx, ωy)
     jcheck = checkgl(newy, ry)
     numerator = zeros(1)
     denominator = zeros(1)
-
     for j in eachindex(ry)
         if jcheck ==0
             Δy = (newy .- ry[j])
@@ -389,10 +388,10 @@ function lagrange_eval_nocheck(f, newx, rx, ωx)
     return numerator[1] / denominator[1]
 end
 
-# 3D
+# 3D, only valid for rectangles
 function getvalue(fl, xC, yC, zC, location, p, lin, linlocal, x, y, z, rx, ry, rz, ωx, ωy, ωz)
     e = findelement(xC, yC, zC, location, p, lin)
-    # need bounds to rescale
+    # need bounds to rescale, only value for cartesian
     
     xmax = x[linlocal[length(rx),1,1], e]
     xmin = x[linlocal[1,1,1], e]

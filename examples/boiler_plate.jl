@@ -1,5 +1,6 @@
-using ClimateMachine, JLD2, GLMakie
+using ClimateMachine, JLD2, GLMakie, MPI
 ClimateMachine.init()
+using ClimateMachine.Mesh.Topologies
 using ClimateMachine.Ocean
 using ClimateMachine.Ocean.Domains
 using ClimateMachine.Ocean.Fields

@@ -1,5 +1,5 @@
 using Base.Threads, LinearAlgebra
-import Base: ndims, getindex, materialize!, broadcasted
+import Base: getindex, materialize!, broadcasted
 
 abstract type AbstractField end
 struct ScalarField{S,T} <: AbstractField

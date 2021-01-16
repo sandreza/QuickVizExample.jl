@@ -1,12 +1,14 @@
 module QuickVizExample
 
 include("bigfileofstuff.jl")
-export cellaverage, coordinates, GridHelper
+export cellaverage, cellcenters, coordinates, GridHelper
 
 include("vizinanigans.jl")
 export volumeslice, visualize
 
 include("scalarfields.jl")
 export ScalarField
+
+include("grid.jl")
 
 end # module
