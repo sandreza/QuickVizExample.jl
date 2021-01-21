@@ -51,4 +51,17 @@ println("interpolation time is $(toc - tic) seconds")
 # visualize (z-axis is time here)
 states = [ut, vt, ηt, ct]
 statenames = ["u", "v", "η", "c"]
-volumeslice(states, statenames = statenames)
+scene = volumeslice(states, statenames = statenames)
+visualize(states)
+visualize([ut[:,:,1]])
+
+##
+seconds = 5
+fps = 30
+frames = round(Int, fps * seconds )
+record(scene, pwd() * "/example.mp4"; framerate = fps) do io
+    for i = 1:frames
+        sleep(1/fps)
+        recordframe!(io)
+    end
+end
